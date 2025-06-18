@@ -56,47 +56,52 @@
     }
 
     /* Lampička */
-.string {
-  width: 4px;
-  height: 120px;
-  background: #ccc;
-  transform-origin: top center;
-  transition: transform 0.3s ease;
-}
+    .lamp {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      z-index: 5;
+    }
 
-.bulb {
-  width: 40px;
-  height: 40px;
-  background: yellow;
-  border-radius: 50%;
-  box-shadow: 0 0 25px yellow;
-  transition: background 0.4s, box-shadow 0.4s, transform 0.2s;
-}
+    .string {
+      width: 4px;
+      height: 120px;
+      background: #ccc;
+    }
 
-.lamp.off .bulb {
-  background: #444;
-  box-shadow: none;
-}
+    .bulb {
+      width: 40px;
+      height: 40px;
+      background: yellow;
+      border-radius: 50%;
+      box-shadow: 0 0 25px yellow;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
 
-body.light-mode .bulb {
-  background: #fff176;
-  box-shadow: 0 0 25px #fff176;
-}
+    .lamp.off .bulb {
+      background: #444;
+      box-shadow: none;
+    }
 
-body.light-mode .lamp.off .bulb {
-  background: #999;
-  box-shadow: none;
-}
+    body.light-mode {
+      background: var(--bg-color-light);
+      color: var(--text-color-light);
+    }
 
-/* Tahací animace */
-.lamp.animate .string {
-  transform: rotate(15deg);
-}
+    body.light-mode .bulb {
+      background: #fff176;
+      box-shadow: 0 0 25px #fff176;
+    }
 
-.lamp.animate .bulb {
-  transform: scale(1.1);
-}
-
+    body.light-mode .lamp.off .bulb {
+      background: #999;
+      box-shadow: none;
+    }
   </style>
 </head>
 <body>
@@ -151,14 +156,10 @@ body.light-mode .lamp.off .bulb {
     setInterval(aktualizujDatumCas, 1000);
 
     // Přepínání režimu
-function prepniRezim() {
-  const lampicka = document.getElementById('lampicka');
-  document.body.classList.toggle('light-mode');
-  lampicka.classList.toggle('off');
-  {
-  // Spustí krátkou animaci "
-
-
+    function prepniRezim() {
+      document.body.classList.toggle('light-mode');
+      document.getElementById('lampicka').classList.toggle('off');
+    }
   </script>
 </body>
 </html>
