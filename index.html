@@ -7,30 +7,73 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #e0eafc, #cfdef3);
-      color: #333;
-      text-align: center;
       margin: 0;
-      padding: 4em 1em;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     h1 {
       font-size: 3em;
-      color: #005b96;
-      margin-bottom: 0.3em;
+      margin: 0.3em;
     }
 
-    #cas {
+    p {
       font-size: 1.5em;
-      margin-top: 1em;
+      margin: 0.3em;
+    }
+
+    #cursor-effect {
+      position: fixed;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: background 0.2s;
+      z-index: 1;
+    }
+
+    #content {
+      z-index: 2;
+      text-align: center;
+      position: relative;
     }
   </style>
 </head>
 <body>
-  <h1>Tomáš Mucha 3.H</h1>
-  <div id="cas"></div>
+  <div id="cursor-effect"></div>
+
+  <div id="content">
+    <h1>Tomáš Mucha 3.H</h1>
+    <p id="pozdrav"></p>
+    <p id="cas"></p>
+  </div>
 
   <script>
+    // Cursor follow efekt
+    const cursor = document.getElementById("cursor-effect");
+    document.addEventListener("mousemove", e => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+
+    // Dynamický pozdrav
+    const hodina = new Date().getHours();
+    let pozdrav = "Ahoj";
+    if (hodina < 12) pozdrav = "Dobré ráno";
+    else if (hodina < 18) pozdrav = "Dobré odpoledne";
+    else pozdrav = "Dobrý večer";
+    document.getElementById("pozdrav").textContent = `${pozdrav}, Tomáši!`;
+
+    // Aktuální čas s aktualizací
     function aktualizujCas() {
       const ted = new Date();
       const formatovany = ted.toLocaleString('cs-CZ', {
@@ -44,7 +87,6 @@
       document.getElementById('cas').textContent = `Dnes je ${formatovany}`;
     }
 
-    // aktualizuj hned a pak každou sekundu
     aktualizujCas();
     setInterval(aktualizujCas, 1000);
   </script>
