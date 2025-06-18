@@ -33,7 +33,7 @@
       position: fixed;
       width: 150px;
       height: 150px;
-      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
@@ -54,41 +54,55 @@
   <div id="content">
     <h1>Tomáš Mucha 3.H</h1>
     <p id="pozdrav"></p>
+    <p id="datum"></p>
     <p id="cas"></p>
   </div>
 
   <script>
-    // Cursor follow efekt
+    // Efekt sledující myš
     const cursor = document.getElementById("cursor-effect");
     document.addEventListener("mousemove", e => {
       cursor.style.left = `${e.clientX}px`;
       cursor.style.top = `${e.clientY}px`;
     });
 
-    // Dynamický pozdrav
-    const hodina = new Date().getHours();
-    let pozdrav = "Ahoj";
-    if (hodina < 12) pozdrav = "Dobré ráno";
-    else if (hodina < 18) pozdrav = "Dobré odpoledne";
-    else pozdrav = "Dobrý večer";
-    document.getElementById("pozdrav").textContent = `${pozdrav}, Tomáši!`;
+    // Funkce pro zobrazení pozdravu podle denní doby
+    function nastavPozdrav() {
+      const hodina = new Date().getHours();
+      let pozdrav = "Ahoj";
 
-    // Aktuální čas s aktualizací
-    function aktualizujCas() {
+      if (hodina < 6) pozdrav = "Dobrou noc";
+      else if (hodina < 10) pozdrav = "Dobré ráno";
+      else if (hodina < 12) pozdrav = "Dobré dopoledne";
+      else if (hodina < 18) pozdrav = "Dobré odpoledne";
+      else pozdrav = "Dobrý večer";
+
+      document.getElementById("pozdrav").textContent = `${pozdrav}, Tomáši!`;
+    }
+
+    // Funkce pro zobrazení datumu a času
+    function aktualizujDatumCas() {
       const ted = new Date();
-      const formatovany = ted.toLocaleString('cs-CZ', {
+
+      const datum = ted.toLocaleDateString('cs-CZ', {
         day: 'numeric',
         month: 'numeric',
-        year: 'numeric',
+        year: 'numeric'
+      });
+
+      const cas = ted.toLocaleTimeString('cs-CZ', {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit'
       });
-      document.getElementById('cas').textContent = `Dnes je ${formatovany}`;
+
+      document.getElementById("datum").textContent = `Dnes je ${datum}`;
+      document.getElementById("cas").textContent = `Aktuální čas: ${cas}`;
     }
 
-    aktualizujCas();
-    setInterval(aktualizujCas, 1000);
+    nastavPozdrav();
+    aktualizujDatumCas();
+    setInterval(aktualizujDatumCas, 1000); // každou sekundu
   </script>
 </body>
 </html>
