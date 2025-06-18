@@ -5,18 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Moje stránka</title>
   <style>
+    :root {
+      --bg-color-light: #f2f2f2;
+      --text-color-light: #111;
+      --bg-color-dark: #1b1b1b;
+      --text-color-dark: #fff;
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: white;
-      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background 0.5s, color 0.5s;
+      background: var(--bg-color-dark);
+      color: var(--text-color-dark);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
     h1 {
@@ -29,15 +37,15 @@
       margin: 0.3em;
     }
 
+    /* Cursor efekt */
     #cursor-effect {
       position: fixed;
       width: 150px;
       height: 150px;
-      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
-      transition: background 0.2s;
       z-index: 1;
     }
 
@@ -46,11 +54,67 @@
       text-align: center;
       position: relative;
     }
+
+    /* Lampička */
+    .lamp {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .string {
+      width: 4px;
+      height: 120px;
+      background: #ccc;
+    }
+
+    .bulb {
+      width: 40px;
+      height: 40px;
+      background: yellow;
+      border-radius: 50%;
+      box-shadow: 0 0 25px yellow;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+
+    .lamp.off .bulb {
+      background: #444;
+      box-shadow: none;
+    }
+
+    body.light-mode {
+      background: var(--bg-color-light);
+      color: var(--text-color-light);
+    }
+
+    body.light-mode .bulb {
+      background: #fff176;
+      box-shadow: 0 0 25px #fff176;
+    }
+
+    body.light-mode .lamp.off .bulb {
+      background: #999;
+      box-shadow: none;
+    }
   </style>
 </head>
 <body>
+  <!-- Efekt sledující myš -->
   <div id="cursor-effect"></div>
 
+  <!-- Lampička -->
+  <div class="lamp" id="lampicka" onclick="prepniRezim()">
+    <div class="string"></div>
+    <div class="bulb"></div>
+  </div>
+
+  <!-- Obsah -->
   <div id="content">
     <h1>Tomáš Mucha 3.H</h1>
     <p id="pozdrav"></p>
@@ -66,43 +130,36 @@
       cursor.style.top = `${e.clientY}px`;
     });
 
-    // Funkce pro zobrazení pozdravu podle denní doby
+    // Pozdrav
     function nastavPozdrav() {
       const hodina = new Date().getHours();
       let pozdrav = "Ahoj";
-
       if (hodina < 6) pozdrav = "Dobrou noc";
       else if (hodina < 10) pozdrav = "Dobré ráno";
       else if (hodina < 12) pozdrav = "Dobré dopoledne";
       else if (hodina < 18) pozdrav = "Dobré odpoledne";
       else pozdrav = "Dobrý večer";
-
       document.getElementById("pozdrav").textContent = `${pozdrav}, pane učiteli!`;
     }
 
-    // Funkce pro zobrazení datumu a času
+    // Čas a datum
     function aktualizujDatumCas() {
       const ted = new Date();
-
-      const datum = ted.toLocaleDateString('cs-CZ', {
-        day: 'numeric',
-        month: 'numeric',
-        year: 'numeric'
-      });
-
-      const cas = ted.toLocaleTimeString('cs-CZ', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      });
-
+      const datum = ted.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric', year: 'numeric' });
+      const cas = ted.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       document.getElementById("datum").textContent = `Dnes je ${datum}`;
       document.getElementById("cas").textContent = `Aktuální čas: ${cas}`;
     }
 
     nastavPozdrav();
     aktualizujDatumCas();
-    setInterval(aktualizujDatumCas, 1000); // každou sekundu
+    setInterval(aktualizujDatumCas, 1000);
+
+    // Přepínání režimu
+    function prepniRezim() {
+      document.body.classList.toggle('light-mode');
+      document.getElementById('lampicka').classList.toggle('off');
+    }
   </script>
 </body>
 </html>
