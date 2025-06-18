@@ -20,18 +20,33 @@
       margin-bottom: 0.3em;
     }
 
-    p {
+    #cas {
       font-size: 1.5em;
-    }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 2em; }
-      p { font-size: 1.2em; }
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
   <h1>Tomáš Mucha 3.H</h1>
-  <p>Dneska je 16. 6. 2025</p>
+  <div id="cas"></div>
+
+  <script>
+    function aktualizujCas() {
+      const ted = new Date();
+      const formatovany = ted.toLocaleString('cs-CZ', {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      document.getElementById('cas').textContent = `Dnes je ${formatovany}`;
+    }
+
+    // aktualizuj hned a pak každou sekundu
+    aktualizujCas();
+    setInterval(aktualizujCas, 1000);
+  </script>
 </body>
 </html>
